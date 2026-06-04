@@ -221,8 +221,8 @@ export default function FluxoraPage() {
             {NAV_LINKS.map(l => <li key={l}><a href="#" className="zv-nav__link">{l}</a></li>)}
           </ul>
           <div className="zv-nav__actions">
-            <a href="#" className="zv-btn zv-btn--ghost">Se connecter</a>
-            <a href="#" className="zv-btn zv-btn--primary">Commencer →</a>
+            <a href="/login" className="zv-btn zv-btn--ghost">Se connecter</a>
+            <a href="/register" className="zv-btn zv-btn--primary">Commencer →</a>
           </div>
         </div>
       </nav>

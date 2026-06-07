@@ -203,27 +203,7 @@ export default function DashboardPage() {
                   <button className="zd-btn zd-btn--cyan" style={{flexShrink:0}} onClick={() => setActiveSection("generer")}>💎 Ouvrir l&apos;essai gratuit</button>
                 </div>
 
-                {/* Comment gagner */}
-                <div style={{marginBottom:8}}>
-                  <div className="zd-tag zd-tag--cyan" style={{marginBottom:8}}>✦ COMMENT GAGNER</div>
-                  <h2 className="zd-h2">Trois façons de gagner de l&apos;argent avec Fluxora</h2>
-                  <p className="zd-sub" style={{marginBottom:16}}>Commencez par le travail client, puis ajoutez les revenus en marque blanche et les commissions d&apos;affiliation.</p>
-                </div>
-                <div className="zd-grid3" style={{marginBottom:28}}>
-                  {[
-                    {icon:"⚡",tag:"VOIE 1",title:"Créer pour des clients",desc:"Utilisez les outils image, vidéo et audio pour livrer du contenu payé plus vite.",link:"Ouvrir les outils"},
-                    {icon:"👑",tag:"VOIE 2",title:"Lancez votre propre plateforme",desc:"Passez au plan Pro, marquez le produit et vendez crédits ou abonnements sous votre marque.",link:"Ouvrir le lancement"},
-                    {icon:"🔗",tag:"VOIE 3",title:"Programme d'affiliation",desc:"Partagez votre lien affilié et gagnez des commissions quand des personnes s'abonnent.",link:"Ouvrir l'affiliation"},
-                  ].map(w => (
-                    <div key={w.tag} className="zd-card" style={{padding:20}}>
-                      <div style={{fontSize:22,marginBottom:10}}>{w.icon}</div>
-                      <div className="zd-tag zd-tag--cyan" style={{marginBottom:6}}>{w.tag}</div>
-                      <div style={{fontWeight:700,color:"#fff",fontSize:14,marginBottom:8}}>{w.title}</div>
-                      <div style={{color:"#6b7280",fontSize:12,lineHeight:1.6,marginBottom:12}}>{w.desc}</div>
-                      <a href="#" className="zd-link">{w.link} →</a>
-                    </div>
-                  ))}
-                </div>
+
 
                 {/* Exemples réels */}
                 <div style={{marginBottom:8}}>

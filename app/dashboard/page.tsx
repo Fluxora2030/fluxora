@@ -9,6 +9,12 @@ interface User {
   user_metadata: { full_name?: string };
 }
 
+const EXAMPLES = [
+  { type: "VIDÉO", title: "Transformation cinématique", desc: "Un court exemple animé pour les promos, les idées de personnages et les clips sociaux.", img: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400&q=80" },
+  { type: "IMAGE", title: "Concept visuel ludique", desc: "Une image soignée pour les idées de campagne, les affiches et les tests visuels.", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" },
+  { type: "VIDÉO", title: "Scène vidéo de personnages", desc: "Un script simple peut devenir une scène complète avec les bons outils.", img: "https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?w=400&q=80" },
+];
+
 export default function DashboardPage() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
@@ -19,11 +25,12 @@ export default function DashboardPage() {
   const [generating, setGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [genError, setGenError] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
     const getUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session) { router.push("/login"); } 
+      if (!session) { router.push("/login"); }
       else { setUser(session.user as User); }
       setLoading(false);
     };
@@ -56,7 +63,7 @@ export default function DashboardPage() {
   const userName = user?.user_metadata?.full_name || user?.email?.split("@")[0] || "utilisateur";
 
   if (loading) return (
-    <div style={{ display:"flex", alignItems:"center", justifyContent:"center", minHeight:"100vh", background:"#0a0a14", color:"#fff", fontFamily:"Inter,sans-serif" }}>
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", background: "#0d0d1a", color: "#fff", fontFamily: "Inter,sans-serif", fontSize: 14 }}>
       Chargement...
     </div>
   );
@@ -65,243 +72,277 @@ export default function DashboardPage() {
     <>
       <style>{CSS}</style>
       <div className="zd">
-        {/* SIDEBAR */}
-        <aside className="zd-sidebar">
-          <div className="zd-sidebar__top">
-            <div className="zd-brand">
-              <div className="zd-brand__icon">F</div>
-              <div>
-                <div className="zd-brand__name">Fluxora</div>
-                <div className="zd-brand__sub">Outils et services IA</div>
-              </div>
-            </div>
-            <div className="zd-credits-badge">
-              <span style={{fontSize:11,color:"#6b7280"}}>crédits</span>
-              <span style={{fontSize:18,fontWeight:800,color:"#fff"}}>0</span>
+
+        {/* ── SIDEBAR ── */}
+        <aside className={`zd-sb ${sidebarOpen ? "" : "zd-sb--collapsed"}`}>
+          <div className="zd-sb__brand">
+            <div className="zd-sb__icon">F</div>
+            <div className="zd-sb__name-wrap">
+              <span className="zd-sb__name">Fluxora</span>
+              <span className="zd-sb__sub">Outils et services IA</span>
             </div>
           </div>
 
-          <nav className="zd-nav">
-            <div className="zd-nav__item zd-nav__item--active" onClick={() => setActiveSection("accueil")}>
-              <span>🏠</span> Accueil
+          <div className="zd-sb__credits">
+            <span className="zd-sb__credits-label">crédits</span>
+            <span className="zd-sb__credits-val">0</span>
+          </div>
+
+          <nav className="zd-sb__nav">
+            <div className={`zd-sb__item ${activeSection === "accueil" ? "zd-sb__item--on" : ""}`} onClick={() => setActiveSection("accueil")}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              Accueil
             </div>
-            <div className="zd-nav__section">CRÉER</div>
-            <div className={`zd-nav__item ${activeSection === "generer" ? "zd-nav__item--active" : ""}`} onClick={() => setActiveSection("generer")}>
-              <span>⚡</span> Générer
+
+            <div className="zd-sb__section">CRÉER</div>
+            <div className={`zd-sb__item ${activeSection === "generer" ? "zd-sb__item--on" : ""}`} onClick={() => setActiveSection("generer")}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              Générer
             </div>
-            <div className="zd-nav__section">BIBLIOTHÈQUE</div>
-            <div className="zd-nav__item"><span>📋</span> Projets</div>
-            <div className="zd-nav__item"><span>🖼</span> Mes créations</div>
-            <div className="zd-nav__item"><span>📁</span> Fichiers de stockage</div>
-            <div className="zd-nav__section">COMPTE</div>
-            <div className="zd-nav__item"><span>💳</span> Portefeuille et crédits</div>
-            <div className="zd-nav__item"><span>🤝</span> Affiliés</div>
+
+            <div className="zd-sb__section">BIBLIOTHÈQUE</div>
+            <div className="zd-sb__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              Projets
+            </div>
+            <div className="zd-sb__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              Mes créations
+            </div>
+            <div className="zd-sb__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              Fichiers de stockage
+            </div>
+
+            <div className="zd-sb__section">COMPTE</div>
+            <div className="zd-sb__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+              Portefeuille et crédits
+            </div>
+            <div className="zd-sb__item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              Affiliés
+            </div>
           </nav>
 
-          <div className="zd-sidebar__bottom">
-            <div className="zd-user" onClick={handleLogout} style={{cursor:"pointer"}}>
-              <div className="zd-user__avatar">{userName[0].toUpperCase()}</div>
-              <div>
-                <div className="zd-user__name">{userName}</div>
-                <div className="zd-user__email">{user?.email}</div>
-              </div>
+          <div className="zd-sb__user" onClick={handleLogout} title="Se déconnecter">
+            <div className="zd-sb__avatar">{userName[0].toUpperCase()}</div>
+            <div className="zd-sb__user-info">
+              <span className="zd-sb__user-name">{userName}</span>
+              <span className="zd-sb__user-email">{user?.email}</span>
             </div>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" style={{marginLeft:"auto",color:"#555",flexShrink:0}}><polyline points="6 9 12 15 18 9"/></svg>
           </div>
         </aside>
 
-        {/* MAIN */}
+        {/* ── MAIN ── */}
         <main className="zd-main">
-          {/* Top bar */}
-          <div className="zd-topbar">
-            <input className="zd-search" type="text" placeholder="Rechercher..." />
-            <div className="zd-topbar__actions">
-              <button className="zd-icon-btn">🌐</button>
-              <button className="zd-icon-btn">🌙</button>
-              <button className="zd-icon-btn">🔔</button>
-              <div className="zd-user__avatar" style={{width:32,height:32,fontSize:14}}>{userName[0].toUpperCase()}</div>
+
+          {/* Topbar */}
+          <div className="zd-top">
+            <div className="zd-top__search-wrap">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{position:"absolute",left:12,color:"#555"}}><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input className="zd-top__search" placeholder="Rechercher..." />
+            </div>
+            <div className="zd-top__right">
+              <button className="zd-top__btn">🌐</button>
+              <button className="zd-top__btn">🌙</button>
+              <button className="zd-top__btn">🔔</button>
+              <div className="zd-sb__avatar" style={{width:32,height:32,fontSize:13}}>{userName[0].toUpperCase()}</div>
             </div>
           </div>
 
+          {/* Content */}
           <div className="zd-content">
+
+            {/* ── ACCUEIL ── */}
             {activeSection === "accueil" && (
               <>
-                <h1 className="zd-welcome">Bon retour, {userName} 👋</h1>
-                <p className="zd-welcome__sub">Créez des images, de la vidéo et de l&apos;audio depuis le même tableau de bord.</p>
+                <h1 className="zd-h1">Bon retour, {userName} 👋</h1>
+                <p className="zd-sub">Créez des images, de la vidéo et de l&apos;audio depuis le même tableau de bord. Vos médias terminés apparaissent ici au fil de vos créations.</p>
 
-                {/* Banner pack gratuit */}
+                {/* Banner */}
                 {showBanner && (
-                  <div className="zd-banner">
-                    <button className="zd-banner__close" onClick={() => setShowBanner(false)}>×</button>
-                    <div className="zd-banner__tag">✦ COMMENCEZ ICI</div>
-                    <h2 className="zd-banner__title">Commencez avec votre pack gratuit</h2>
-                    <p className="zd-banner__sub">Vos images et votre voix off gratuites sont le moyen le plus simple de tester le produit.</p>
-                    <div className="zd-banner__steps">
+                  <div className="zd-card zd-card--banner">
+                    <button className="zd-card__x" onClick={() => setShowBanner(false)}>✕</button>
+                    <div className="zd-tag zd-tag--cyan">✦ COMMENCEZ ICI</div>
+                    <h2 className="zd-card__title">Commencez avec votre pack gratuit</h2>
+                    <p className="zd-card__desc">Vos images et votre voix off gratuites sont le moyen le plus simple de tester le produit avant de dépenser des crédits payants.</p>
+                    <div className="zd-steps">
                       {[["1","Ouvrez votre pack gratuit"],["2","Créez votre première image"],["3","Retrouvez-la dans Mes créations"]].map(([n,t]) => (
-                        <div key={n} className="zd-banner__step">
-                          <div className="zd-banner__step-num">{n}</div>
-                          <div className="zd-banner__step-text">{t}</div>
+                        <div key={n} className="zd-step">
+                          <div className="zd-step__num">{n}</div>
+                          <div className="zd-step__text">{t}</div>
                         </div>
                       ))}
                     </div>
-                    <div className="zd-banner__actions">
-                      <button className="zd-btn zd-btn--primary" onClick={() => setActiveSection("generer")}>💎 Utiliser le pack gratuit</button>
+                    <div className="zd-row" style={{gap:10,flexWrap:"wrap",marginBottom:14}}>
+                      <button className="zd-btn zd-btn--cyan" onClick={() => setActiveSection("generer")}>💎 Utiliser le pack gratuit</button>
                       <button className="zd-btn zd-btn--ghost">Afficher le tour rapide →</button>
                       <button className="zd-btn zd-btn--ghost">Passer aux images →</button>
                     </div>
-                    <div className="zd-banner__badges">
-                      <span className="zd-badge">3 / 3 images restantes</span>
-                      <span className="zd-badge">1 / 1 voix off restante</span>
+                    <div className="zd-row" style={{gap:8}}>
+                      <span className="zd-pill">3 / 3 images restantes</span>
+                      <span className="zd-pill">1 / 1 voix off restante</span>
                     </div>
                   </div>
                 )}
 
                 {/* Pack gratuit vérifié */}
-                <div className="zd-card zd-card--accent">
-                  <div>
-                    <div className="zd-card__tag">✦ PACK GRATUIT POUR UTILISATEUR VÉRIFIÉ</div>
-                    <h3 className="zd-card__title">Réclamez vos images et votre voix off gratuites</h3>
-                    <p className="zd-card__sub">3 images et 1 voix off vous attendent, totalement séparées de vos crédits payants.</p>
-                    <div style={{display:"flex",gap:8,marginTop:12,flexWrap:"wrap"}}>
-                      <span className="zd-badge">Pack gratuit</span>
-                      <span className="zd-badge">3 / 3 images restantes</span>
-                      <span className="zd-badge">1 / 1 voix off restante</span>
+                <div className="zd-card zd-card--accent zd-row" style={{alignItems:"flex-start",gap:24,flexWrap:"wrap"}}>
+                  <div style={{flex:1,minWidth:200}}>
+                    <div className="zd-tag zd-tag--cyan" style={{marginBottom:10}}>✦ PACK GRATUIT POUR UTILISATEUR VÉRIFIÉ</div>
+                    <h2 className="zd-card__title" style={{fontSize:18}}>Réclamez vos images et votre voix off gratuites</h2>
+                    <p className="zd-card__desc">3 images et 1 voix off vous attendent, totalement séparées de vos crédits payants.</p>
+                    <div className="zd-row" style={{gap:8,marginTop:12,flexWrap:"wrap"}}>
+                      <span className="zd-pill">Pack gratuit</span>
+                      <span className="zd-pill">3 / 3 images restantes</span>
+                      <span className="zd-pill">1 / 1 voix off restante</span>
                     </div>
                   </div>
-                  <button className="zd-btn zd-btn--primary" onClick={() => setActiveSection("generer")}>💎 Ouvrir l&apos;essai gratuit</button>
+                  <button className="zd-btn zd-btn--cyan" style={{flexShrink:0}} onClick={() => setActiveSection("generer")}>💎 Ouvrir l&apos;essai gratuit</button>
                 </div>
 
-                {/* 3 façons de gagner */}
-                <div className="zd-section-title">
-                  <div className="zd-card__tag">✦ COMMENT GAGNER</div>
-                  <h2>Trois façons de gagner de l&apos;argent avec Fluxora</h2>
-                  <p style={{color:"#6b7280",fontSize:14,marginTop:6}}>Commencez par le travail client, puis ajoutez les revenus en marque blanche et les commissions d&apos;affiliation.</p>
+                {/* Comment gagner */}
+                <div style={{marginBottom:8}}>
+                  <div className="zd-tag zd-tag--cyan" style={{marginBottom:8}}>✦ COMMENT GAGNER</div>
+                  <h2 className="zd-h2">Trois façons de gagner de l&apos;argent avec Fluxora</h2>
+                  <p className="zd-sub" style={{marginBottom:16}}>Commencez par le travail client, puis ajoutez les revenus en marque blanche et les commissions d&apos;affiliation.</p>
                 </div>
-                <div className="zd-ways">
+                <div className="zd-grid3" style={{marginBottom:28}}>
                   {[
-                    { icon:"⚡", tag:"VOIE 1", title:"Créer pour des clients", desc:"Utilisez les outils image, vidéo et audio pour livrer du contenu payé plus vite.", link:"Ouvrir les outils" },
-                    { icon:"👑", tag:"VOIE 2", title:"Lancez votre propre plateforme", desc:"Passez au plan Pro, marquez le produit et vendez crédits ou abonnements sous votre marque.", link:"Ouvrir le lancement" },
-                    { icon:"🔗", tag:"VOIE 3", title:"Programme d'affiliation", desc:"Partagez votre lien affilié et gagnez des commissions quand des personnes s'abonnent.", link:"Ouvrir l'affiliation" },
+                    {icon:"⚡",tag:"VOIE 1",title:"Créer pour des clients",desc:"Utilisez les outils image, vidéo et audio pour livrer du contenu payé plus vite.",link:"Ouvrir les outils"},
+                    {icon:"👑",tag:"VOIE 2",title:"Lancez votre propre plateforme",desc:"Passez au plan Pro, marquez le produit et vendez crédits ou abonnements sous votre marque.",link:"Ouvrir le lancement"},
+                    {icon:"🔗",tag:"VOIE 3",title:"Programme d'affiliation",desc:"Partagez votre lien affilié et gagnez des commissions quand des personnes s'abonnent.",link:"Ouvrir l'affiliation"},
                   ].map(w => (
-                    <div key={w.tag} className="zd-way">
-                      <div className="zd-way__icon">{w.icon}</div>
-                      <div className="zd-way__tag">{w.tag}</div>
-                      <div className="zd-way__title">{w.title}</div>
-                      <div className="zd-way__desc">{w.desc}</div>
-                      <a href="#" className="zd-way__link">{w.link} →</a>
+                    <div key={w.tag} className="zd-card" style={{padding:20}}>
+                      <div style={{fontSize:22,marginBottom:10}}>{w.icon}</div>
+                      <div className="zd-tag zd-tag--cyan" style={{marginBottom:6}}>{w.tag}</div>
+                      <div style={{fontWeight:700,color:"#fff",fontSize:14,marginBottom:8}}>{w.title}</div>
+                      <div style={{color:"#6b7280",fontSize:12,lineHeight:1.6,marginBottom:12}}>{w.desc}</div>
+                      <a href="#" className="zd-link">{w.link} →</a>
                     </div>
                   ))}
                 </div>
 
-                {/* Exemples */}
-                <div className="zd-section-title">
-                  <div className="zd-card__tag">✦ EXEMPLES RÉELS</div>
-                  <h2>Voyez ce que Fluxora peut créer</h2>
+                {/* Exemples réels */}
+                <div style={{marginBottom:8}}>
+                  <div className="zd-tag zd-tag--cyan" style={{marginBottom:8}}>✦ EXEMPLES RÉELS</div>
+                  <h2 className="zd-h2">Voyez ce que Fluxora peut créer</h2>
+                  <p className="zd-sub" style={{marginBottom:16}}>Quelques exemples légers issus de vraies sorties image et vidéo.</p>
                 </div>
-                <div className="zd-examples">
-                  {[
-                    { type:"VIDÉO", title:"Transformation cinématique", desc:"Un court exemple animé pour les promos." },
-                    { type:"IMAGE", title:"Concept visuel ludique", desc:"Une image soignée pour les idées de campagne." },
-                    { type:"VIDÉO", title:"Scène vidéo de personnages", desc:"Un script simple peut devenir une scène." },
-                  ].map(e => (
-                    <div key={e.title} className="zd-example">
-                      <div className="zd-example__preview">
-                        <span className="zd-example__type">{e.type === "VIDÉO" ? "🎬" : "🖼"} {e.type}</span>
+                <div className="zd-grid3" style={{marginBottom:28}}>
+                  {EXAMPLES.map(e => (
+                    <div key={e.title} className="zd-card" style={{padding:0,overflow:"hidden"}}>
+                      <div style={{position:"relative",height:160,overflow:"hidden"}}>
+                        <img src={e.img} alt={e.title} style={{width:"100%",height:"100%",objectFit:"cover"}} />
+                        <div style={{position:"absolute",inset:0,background:"rgba(0,0,0,.35)"}} />
+                        <div style={{position:"absolute",top:10,left:10,display:"flex",gap:6}}>
+                          <span className="zd-pill" style={{fontSize:10}}>{e.type === "VIDÉO" ? "🎬" : "🖼"} {e.type}</span>
+                          <span className="zd-pill" style={{fontSize:10,background:"rgba(6,182,212,.2)",borderColor:"rgba(6,182,212,.3)",color:"#06b6d4"}}>Exemple sélectionné</span>
+                        </div>
+                        <span style={{position:"absolute",bottom:10,right:10,fontSize:10,color:"rgba(255,255,255,.6)"}}>Exemple</span>
                       </div>
-                      <div className="zd-example__title">{e.title}</div>
-                      <div className="zd-example__desc">{e.desc}</div>
-                      <a href="#" className="zd-way__link" onClick={e => { e.preventDefault(); setActiveSection("generer"); }}>Créer quelque chose comme ça →</a>
+                      <div style={{padding:"14px 16px"}}>
+                        <div style={{fontWeight:700,color:"#fff",fontSize:13,marginBottom:5}}>{e.title}</div>
+                        <div style={{color:"#6b7280",fontSize:11,lineHeight:1.5,marginBottom:10}}>{e.desc}</div>
+                        <a href="#" className="zd-link" onClick={(ev) => { ev.preventDefault(); setActiveSection("generer"); }}>Créer quelque chose comme ça →</a>
+                      </div>
                     </div>
                   ))}
                 </div>
 
                 {/* Quick actions */}
-                <div className="zd-quick">
-                  {[["🖼","Créer des images","Visuels produit"],["🎬","Créer une vidéo","Clips promo"],["🎵","Créer de l'audio","Voix off"]].map(([i,t,s]) => (
-                    <div key={t} className="zd-quick__item" onClick={() => setActiveSection("generer")}>
-                      <span style={{fontSize:20}}>{i}</span>
+                <div className="zd-grid3" style={{marginBottom:24}}>
+                  {[["🖼","Créer des images","Visuels produit","generer"],["🎬","Créer une vidéo","Clips promo","generer"],["🎵","Créer de l'audio","Voix off","generer"]].map(([ic,t,s,sec]) => (
+                    <div key={t} className="zd-card zd-card--action" onClick={() => setActiveSection(sec)} style={{padding:"14px 16px",display:"flex",alignItems:"center",gap:12,cursor:"pointer"}}>
+                      <span style={{fontSize:20}}>{ic}</span>
                       <div>
-                        <div style={{fontWeight:600,color:"#fff",fontSize:14}}>{t}</div>
-                        <div style={{color:"#6b7280",fontSize:12}}>{s}</div>
+                        <div style={{fontWeight:600,color:"#fff",fontSize:13}}>{t}</div>
+                        <div style={{color:"#6b7280",fontSize:11}}>{s}</div>
                       </div>
-                      <span style={{marginLeft:"auto",color:"#6b7280"}}>→</span>
+                      <span style={{marginLeft:"auto",color:"#555",fontSize:16}}>→</span>
                     </div>
                   ))}
                 </div>
 
                 {/* Stats */}
-                <div className="zd-stats">
-                  <div className="zd-stat">
-                    <div className="zd-stat__label">SOLDE DE CRÉDITS</div>
-                    <div className="zd-stat__value">0 crédits</div>
-                    <div className="zd-stat__sub">N&apos;expire jamais · Rechargez à tout moment</div>
+                <div className="zd-grid3" style={{marginBottom:24}}>
+                  <div className="zd-card" style={{padding:20}}>
+                    <div className="zd-tag zd-tag--muted" style={{marginBottom:8}}>SOLDE DE CRÉDITS</div>
+                    <div style={{fontSize:26,fontWeight:800,color:"#fff",letterSpacing:"-0.5px"}}>0 crédits</div>
+                    <div style={{fontSize:11,color:"#6b7280",marginTop:4}}>N&apos;expire jamais · Rechargez à tout moment</div>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="1.5" style={{marginTop:12}}><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
                   </div>
-                  <div className="zd-stat">
-                    <div className="zd-stat__label">GÉNÉRATIONS CE MOIS</div>
-                    <div className="zd-stat__value">0</div>
+                  <div className="zd-card" style={{padding:20}}>
+                    <div className="zd-tag zd-tag--muted" style={{marginBottom:8}}>GÉNÉRATIONS CE MOIS</div>
+                    <div style={{fontSize:26,fontWeight:800,color:"#fff",letterSpacing:"-0.5px"}}>0</div>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="1.5" style={{marginTop:12}}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                   </div>
-                  <div className="zd-stat">
-                    <div className="zd-stat__label">DÉPENSÉ CE MOIS</div>
-                    <div className="zd-stat__value">$0.00</div>
+                  <div className="zd-card" style={{padding:20}}>
+                    <div className="zd-tag zd-tag--muted" style={{marginBottom:8}}>DÉPENSÉ CE MOIS</div>
+                    <div style={{fontSize:26,fontWeight:800,color:"#fff",letterSpacing:"-0.5px"}}>$0.00</div>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="1.5" style={{marginTop:12}}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                   </div>
                 </div>
 
                 {/* Activité récente */}
-                <div className="zd-activity">
-                  <div className="zd-activity__header">
-                    <h3>Activité récente</h3>
-                    <a href="#" className="zd-way__link">Voir tout</a>
+                <div className="zd-card" style={{padding:20}}>
+                  <div className="zd-row" style={{justifyContent:"space-between",marginBottom:16}}>
+                    <span style={{fontWeight:700,color:"#fff",fontSize:15}}>Activité récente</span>
+                    <a href="#" className="zd-link" style={{fontSize:12}}>Voir tout</a>
                   </div>
-                  <div className="zd-activity__empty">
+                  <div style={{textAlign:"center",padding:"28px 0",color:"#555",fontSize:13}}>
                     Aucune activité récente. Générez du contenu ou rechargez.
                   </div>
                 </div>
               </>
             )}
 
+            {/* ── GÉNÉRER ── */}
             {activeSection === "generer" && (
               <>
-                <h1 className="zd-welcome">Générer du contenu ⚡</h1>
-                <p className="zd-welcome__sub">Choisissez un outil et créez votre premier contenu IA</p>
+                <h1 className="zd-h1">Générer du contenu ⚡</h1>
+                <p className="zd-sub">Utilisez nos outils IA pour créer des images, vidéos et audio.</p>
 
-                <div className="zd-gen-tabs">
-                  {[["🖼","Images"],["🎬","Vidéo"],["🎵","Audio"]].map(([i,t]) => (
-                    <button key={t} className={`zd-gen-tab ${t === "Images" ? "zd-gen-tab--active" : ""}`}>{i} {t}</button>
+                <div className="zd-row" style={{gap:8,marginBottom:20}}>
+                  {[["🖼","Images","#06b6d4"],["🎬","Vidéo",""],["🎵","Audio",""]].map(([ic,t,col]) => (
+                    <button key={t} className="zd-btn" style={{background: col ? "rgba(6,182,212,.1)" : "rgba(255,255,255,.04)", border: col ? "1px solid rgba(6,182,212,.3)" : "1px solid rgba(255,255,255,.08)", color: col || "#6b7280"}}>{ic} {t}</button>
                   ))}
                 </div>
 
-                <div className="zd-gen-box">
-                  <label className="zd-gen-label">Décrivez votre image</label>
+                <div className="zd-card" style={{padding:24,marginBottom:20}}>
+                  <label style={{display:"block",fontWeight:600,color:"#ccc",fontSize:13,marginBottom:10}}>Décrivez votre image</label>
                   <textarea
-                    className="zd-gen-textarea"
+                    className="zd-textarea"
                     placeholder="Ex: Un chat astronaute flottant dans l'espace, style cinématique, lumières néon..."
                     value={prompt}
                     onChange={e => setPrompt(e.target.value)}
                     rows={5}
                   />
-                  <button className="zd-btn zd-btn--primary zd-btn--lg" onClick={handleGenerate} disabled={generating || !prompt}>
+                  <button className="zd-btn zd-btn--cyan zd-btn--full" style={{marginTop:12}} onClick={handleGenerate} disabled={generating || !prompt}>
                     {generating ? "⏳ Génération en cours..." : "⚡ Générer l'image — 5 crédits"}
                   </button>
-                  {genError && <div className="zd-gen-error">{genError}</div>}
+                  {genError && <div className="zd-error">{genError}</div>}
                 </div>
 
                 {generating && (
-                  <div className="zd-gen-loading">
+                  <div className="zd-card zd-row" style={{gap:14,padding:20,marginBottom:20}}>
                     <div className="zd-spinner" />
-                    <p>Génération en cours... 10-30 secondes</p>
+                    <span style={{color:"#6b7280",fontSize:13}}>Génération en cours... 10-30 secondes</span>
                   </div>
                 )}
 
                 {generatedImage && (
-                  <div className="zd-gen-result">
-                    <h3 style={{color:"#fff",marginBottom:16}}>✅ Image générée !</h3>
-                    <img src={generatedImage} alt="Résultat" style={{width:"100%",maxWidth:600,borderRadius:12,display:"block"}} />
-                    <a href={generatedImage} download className="zd-btn zd-btn--primary" style={{marginTop:16,display:"inline-block",textDecoration:"none"}}>
-                      ⬇ Télécharger
-                    </a>
+                  <div className="zd-card" style={{padding:20}}>
+                    <div style={{color:"#10b981",fontWeight:700,marginBottom:14,fontSize:14}}>✅ Image générée avec succès !</div>
+                    <img src={generatedImage} alt="Résultat IA" style={{width:"100%",maxWidth:600,borderRadius:12,display:"block",marginBottom:14}} />
+                    <a href={generatedImage} download="fluxora.png" className="zd-btn zd-btn--cyan" style={{textDecoration:"none",display:"inline-flex"}}>⬇ Télécharger</a>
                   </div>
                 )}
               </>
             )}
+
           </div>
         </main>
       </div>
@@ -311,135 +352,110 @@ export default function DashboardPage() {
 
 const CSS = `
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root { --bg: #0a0a14; --surface: #0f1020; --surface2: #141428; --border: rgba(255,255,255,0.07); --text: #e8e8f0; --muted: #6b7280; --accent: #06b6d4; }
-  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }
+  body { background: #0d0d1a; color: #e8e8f0; font-family: 'Inter', -apple-system, sans-serif; }
 
   .zd { display: flex; min-height: 100vh; }
 
   /* SIDEBAR */
-  .zd-sidebar { width: 240px; background: #080812; border-right: 1px solid var(--border); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; overflow-y: auto; }
-  .zd-sidebar__top { padding: 20px 16px; border-bottom: 1px solid var(--border); }
-  .zd-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
-  .zd-brand__icon { width: 32px; height: 32px; background: linear-gradient(135deg, #06b6d4, #a855f7); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #fff; font-size: 16px; flex-shrink: 0; }
-  .zd-brand__name { font-size: 15px; font-weight: 700; color: #fff; }
-  .zd-brand__sub { font-size: 10px; color: var(--muted); }
-  .zd-credits-badge { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; display: flex; flex-direction: column; }
-  .zd-nav { padding: 12px 8px; flex: 1; }
-  .zd-nav__section { font-size: 10px; color: var(--muted); font-weight: 700; letter-spacing: .08em; padding: 12px 8px 4px; text-transform: uppercase; }
-  .zd-nav__item { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 8px; cursor: pointer; font-size: 13px; color: var(--muted); transition: all .2s; }
-  .zd-nav__item:hover { background: rgba(255,255,255,.04); color: var(--text); }
-  .zd-nav__item--active { background: rgba(6,182,212,.1); color: var(--accent); }
-  .zd-sidebar__bottom { padding: 16px; border-top: 1px solid var(--border); }
-  .zd-user { display: flex; align-items: center; gap: 10px; }
-  .zd-user__avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #06b6d4, #a855f7); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; font-size: 15px; flex-shrink: 0; }
-  .zd-user__name { font-size: 13px; font-weight: 600; color: #fff; }
-  .zd-user__email { font-size: 11px; color: var(--muted); }
+  .zd-sb { width: 220px; background: #080812; border-right: 1px solid rgba(255,255,255,.06); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; overflow-y: auto; z-index: 20; }
+  .zd-sb__brand { display: flex; align-items: center; gap: 10px; padding: 18px 14px 14px; }
+  .zd-sb__icon { width: 30px; height: 30px; background: linear-gradient(135deg,#06b6d4,#a855f7); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #fff; font-size: 15px; flex-shrink: 0; }
+  .zd-sb__name-wrap { display: flex; flex-direction: column; }
+  .zd-sb__name { font-size: 14px; font-weight: 700; color: #fff; }
+  .zd-sb__sub { font-size: 10px; color: #555; }
+  .zd-sb__credits { background: #0f1020; border: 1px solid rgba(255,255,255,.06); border-radius: 8px; padding: 10px 14px; margin: 0 12px 12px; display: flex; flex-direction: column; gap: 2px; }
+  .zd-sb__credits-label { font-size: 10px; color: #555; text-transform: uppercase; letter-spacing: .06em; }
+  .zd-sb__credits-val { font-size: 20px; font-weight: 800; color: #fff; }
+  .zd-sb__nav { flex: 1; padding: 0 8px; }
+  .zd-sb__section { font-size: 9px; color: #444; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 12px 6px 4px; }
+  .zd-sb__item { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 7px; cursor: pointer; font-size: 13px; color: #6b7280; transition: all .15s; }
+  .zd-sb__item:hover { background: rgba(255,255,255,.04); color: #ccc; }
+  .zd-sb__item--on { background: rgba(6,182,212,.1); color: #06b6d4; }
+  .zd-sb__user { display: flex; align-items: center; gap: 9px; padding: 14px 12px; border-top: 1px solid rgba(255,255,255,.06); cursor: pointer; transition: background .15s; }
+  .zd-sb__user:hover { background: rgba(255,255,255,.03); }
+  .zd-sb__avatar { width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg,#06b6d4,#a855f7); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #fff; font-size: 13px; flex-shrink: 0; }
+  .zd-sb__user-info { display: flex; flex-direction: column; overflow: hidden; }
+  .zd-sb__user-name { font-size: 12px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .zd-sb__user-email { font-size: 10px; color: #555; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   /* MAIN */
-  .zd-main { margin-left: 240px; flex: 1; display: flex; flex-direction: column; }
-  .zd-topbar { display: flex; align-items: center; gap: 12px; padding: 14px 28px; border-bottom: 1px solid var(--border); background: #080812; position: sticky; top: 0; z-index: 10; }
-  .zd-search { flex: 1; max-width: 400px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px 14px; color: #fff; font-size: 13px; font-family: inherit; outline: none; }
-  .zd-search::placeholder { color: #444; }
-  .zd-topbar__actions { display: flex; align-items: center; gap: 8px; margin-left: auto; }
-  .zd-icon-btn { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; color: var(--muted); }
+  .zd-main { margin-left: 220px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
 
-  .zd-content { padding: 28px; max-width: 960px; }
-  .zd-welcome { font-size: 26px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
-  .zd-welcome__sub { font-size: 14px; color: var(--muted); margin-top: 6px; margin-bottom: 24px; }
+  /* TOPBAR */
+  .zd-top { display: flex; align-items: center; gap: 12px; padding: 12px 24px; border-bottom: 1px solid rgba(255,255,255,.06); background: #080812; position: sticky; top: 0; z-index: 10; }
+  .zd-top__search-wrap { position: relative; flex: 1; max-width: 380px; }
+  .zd-top__search { width: 100%; background: #0f1020; border: 1px solid rgba(255,255,255,.07); border-radius: 8px; padding: 8px 12px 8px 32px; color: #fff; font-size: 13px; font-family: inherit; outline: none; }
+  .zd-top__search::placeholder { color: #444; }
+  .zd-top__right { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+  .zd-top__btn { background: #0f1020; border: 1px solid rgba(255,255,255,.07); border-radius: 7px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 13px; }
 
-  /* BANNER */
-  .zd-banner { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-bottom: 20px; position: relative; }
-  .zd-banner__close { position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--muted); font-size: 20px; cursor: pointer; }
-  .zd-banner__tag { font-size: 10px; color: var(--accent); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 8px; }
-  .zd-banner__title { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 8px; }
-  .zd-banner__sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
-  .zd-banner__steps { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
-  .zd-banner__step { background: var(--surface2); border-radius: 8px; padding: 12px 16px; flex: 1; min-width: 160px; }
-  .zd-banner__step-num { font-size: 20px; font-weight: 800; color: var(--accent); margin-bottom: 4px; }
-  .zd-banner__step-text { font-size: 12px; color: var(--muted); }
-  .zd-banner__actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
-  .zd-banner__badges { display: flex; gap: 8px; flex-wrap: wrap; }
+  /* CONTENT */
+  .zd-content { padding: 24px; max-width: 900px; width: 100%; }
+  .zd-h1 { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.4px; margin-bottom: 6px; }
+  .zd-h2 { font-size: 18px; font-weight: 700; color: #fff; }
+  .zd-sub { font-size: 13px; color: #6b7280; margin-bottom: 20px; line-height: 1.6; }
 
   /* CARDS */
-  .zd-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
-  .zd-card--accent { border-color: rgba(6,182,212,.2); background: linear-gradient(135deg, rgba(6,182,212,.05), var(--surface)); }
-  .zd-card__tag { font-size: 10px; color: var(--accent); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 8px; }
-  .zd-card__title { font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 6px; }
-  .zd-card__sub { font-size: 13px; color: var(--muted); }
+  .zd-card { background: #0f1020; border: 1px solid rgba(255,255,255,.07); border-radius: 12px; padding: 22px; margin-bottom: 16px; position: relative; }
+  .zd-card--banner { border-color: rgba(255,255,255,.1); }
+  .zd-card--accent { border-color: rgba(6,182,212,.15); background: linear-gradient(135deg,rgba(6,182,212,.04),#0f1020); }
+  .zd-card--action { background: #0f1020; border: 1px solid rgba(255,255,255,.07); border-radius: 10px; transition: border-color .2s; }
+  .zd-card--action:hover { border-color: rgba(6,182,212,.25); }
+  .zd-card__x { position: absolute; top: 14px; right: 14px; background: none; border: none; color: #555; font-size: 16px; cursor: pointer; line-height: 1; }
+  .zd-card__title { font-size: 20px; font-weight: 800; color: #fff; margin-bottom: 8px; margin-top: 6px; letter-spacing: -0.3px; }
+  .zd-card__desc { font-size: 13px; color: #6b7280; line-height: 1.6; }
 
-  /* BADGE */
-  .zd-badge { background: var(--surface2); border: 1px solid var(--border); border-radius: 100px; padding: 3px 10px; font-size: 11px; color: var(--muted); }
+  /* TAGS & PILLS */
+  .zd-tag { font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; display: inline-flex; align-items: center; gap: 4px; }
+  .zd-tag--cyan { color: #06b6d4; }
+  .zd-tag--muted { color: #555; }
+  .zd-pill { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); border-radius: 100px; padding: 3px 10px; font-size: 11px; color: #888; }
+
+  /* STEPS */
+  .zd-steps { display: flex; gap: 10px; margin: 16px 0; flex-wrap: wrap; }
+  .zd-step { background: #141428; border-radius: 8px; padding: 12px 14px; flex: 1; min-width: 140px; }
+  .zd-step__num { font-size: 22px; font-weight: 800; color: #06b6d4; margin-bottom: 4px; }
+  .zd-step__text { font-size: 11px; color: #888; }
 
   /* BUTTONS */
-  .zd-btn { padding: 10px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; font-family: inherit; transition: all .2s; display: inline-flex; align-items: center; gap: 6px; }
-  .zd-btn--primary { background: linear-gradient(135deg, #06b6d4, #0891b2); color: #fff; }
-  .zd-btn--primary:hover { opacity: .9; transform: translateY(-1px); }
-  .zd-btn--primary:disabled { opacity: .5; cursor: not-allowed; transform: none; }
-  .zd-btn--ghost { background: var(--surface2); border: 1px solid var(--border); color: var(--muted); }
-  .zd-btn--ghost:hover { color: var(--text); }
-  .zd-btn--lg { padding: 14px 24px; font-size: 15px; width: 100%; justify-content: center; }
+  .zd-btn { padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid rgba(255,255,255,.08); font-family: inherit; transition: all .2s; display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.04); color: #ccc; }
+  .zd-btn:hover { background: rgba(255,255,255,.07); }
+  .zd-btn--cyan { background: linear-gradient(135deg,#06b6d4,#0891b2); color: #fff; border-color: transparent; }
+  .zd-btn--cyan:hover { opacity: .9; transform: translateY(-1px); }
+  .zd-btn--cyan:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+  .zd-btn--ghost { background: transparent; color: #888; border-color: rgba(255,255,255,.07); }
+  .zd-btn--ghost:hover { color: #ccc; }
+  .zd-btn--full { width: 100%; justify-content: center; padding: 13px; font-size: 14px; }
 
-  /* SECTION TITLE */
-  .zd-section-title { margin-bottom: 16px; margin-top: 8px; }
-  .zd-section-title h2 { font-size: 20px; font-weight: 700; color: #fff; margin-top: 6px; }
+  /* GRID */
+  .zd-grid3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-bottom: 16px; }
 
-  /* WAYS */
-  .zd-ways { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 28px; }
-  .zd-way { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-  .zd-way__icon { font-size: 22px; margin-bottom: 8px; }
-  .zd-way__tag { font-size: 10px; color: var(--accent); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 6px; }
-  .zd-way__title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 8px; }
-  .zd-way__desc { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
-  .zd-way__link { font-size: 12px; color: var(--accent); text-decoration: none; font-weight: 600; }
+  /* ROW */
+  .zd-row { display: flex; align-items: center; }
 
-  /* EXAMPLES */
-  .zd-examples { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 28px; }
-  .zd-example { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-  .zd-example__preview { height: 140px; background: linear-gradient(135deg, #111128, #1a1a3a); display: flex; align-items: flex-start; padding: 10px; position: relative; }
-  .zd-example__type { background: rgba(0,0,0,.6); border-radius: 4px; padding: 3px 8px; font-size: 10px; color: #ccc; font-weight: 600; }
-  .zd-example__title { font-size: 13px; font-weight: 700; color: #fff; padding: 12px 14px 4px; }
-  .zd-example__desc { font-size: 11px; color: var(--muted); padding: 0 14px 8px; line-height: 1.5; }
-  .zd-example .zd-way__link { padding: 0 14px 14px; display: block; }
+  /* LINK */
+  .zd-link { font-size: 12px; color: #06b6d4; text-decoration: none; font-weight: 600; }
+  .zd-link:hover { text-decoration: underline; }
 
-  /* QUICK */
-  .zd-quick { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 24px; }
-  .zd-quick__item { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: border-color .2s; }
-  .zd-quick__item:hover { border-color: rgba(6,182,212,.3); }
+  /* TEXTAREA */
+  .zd-textarea { width: 100%; background: #141428; border: 1px solid rgba(255,255,255,.08); border-radius: 10px; padding: 12px 14px; color: #fff; font-size: 13px; font-family: inherit; outline: none; resize: vertical; transition: border-color .2s; }
+  .zd-textarea:focus { border-color: #06b6d4; }
+  .zd-textarea::placeholder { color: #444; }
 
-  /* STATS */
-  .zd-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 24px; }
-  .zd-stat { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-  .zd-stat__label { font-size: 10px; color: var(--muted); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 8px; }
-  .zd-stat__value { font-size: 24px; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
-  .zd-stat__sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  /* ERROR */
+  .zd-error { background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.25); border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #ef4444; margin-top: 10px; }
 
-  /* ACTIVITY */
-  .zd-activity { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
-  .zd-activity__header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-  .zd-activity__header h3 { font-size: 15px; font-weight: 700; color: #fff; }
-  .zd-activity__empty { text-align: center; padding: 32px; color: var(--muted); font-size: 13px; }
-
-  /* GENERATOR */
-  .zd-gen-tabs { display: flex; gap: 8px; margin-bottom: 20px; }
-  .zd-gen-tab { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 10px 18px; font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer; font-family: inherit; transition: all .2s; }
-  .zd-gen-tab--active { background: rgba(6,182,212,.1); border-color: rgba(6,182,212,.3); color: var(--accent); }
-  .zd-gen-box { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px; margin-bottom: 20px; display: flex; flex-direction: column; gap: 14px; }
-  .zd-gen-label { font-size: 13px; font-weight: 600; color: #ccc; }
-  .zd-gen-textarea { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 14px; color: #fff; font-size: 14px; font-family: inherit; outline: none; resize: vertical; transition: border-color .2s; }
-  .zd-gen-textarea:focus { border-color: var(--accent); }
-  .zd-gen-textarea::placeholder { color: #444; }
-  .zd-gen-error { background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3); border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #ef4444; }
-  .zd-gen-loading { display: flex; align-items: center; gap: 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; color: var(--muted); font-size: 13px; margin-bottom: 20px; }
-  .zd-gen-result { margin-bottom: 20px; }
+  /* SPINNER */
   @keyframes spin { to { transform: rotate(360deg); } }
-  .zd-spinner { width: 28px; height: 28px; border: 3px solid rgba(6,182,212,.2); border-top-color: var(--accent); border-radius: 50%; animation: spin 1s linear infinite; flex-shrink: 0; }
+  .zd-spinner { width: 24px; height: 24px; border: 2px solid rgba(6,182,212,.2); border-top-color: #06b6d4; border-radius: 50%; animation: spin 1s linear infinite; flex-shrink: 0; }
 
   @media (max-width: 1024px) {
-    .zd-ways, .zd-examples, .zd-quick, .zd-stats { grid-template-columns: repeat(2,1fr); }
+    .zd-grid3 { grid-template-columns: repeat(2,1fr); }
   }
   @media (max-width: 768px) {
-    .zd-sidebar { display: none; }
+    .zd-sb { transform: translateX(-100%); }
     .zd-main { margin-left: 0; }
-    .zd-ways, .zd-examples, .zd-quick, .zd-stats { grid-template-columns: 1fr; }
+    .zd-grid3 { grid-template-columns: 1fr; }
+    .zd-content { padding: 16px; }
   }
 `;

@@ -95,7 +95,7 @@ export default function DashboardPage() {
             </div>
 
             <div className="zd-sb__section">CRÉER</div>
-            <div className={`zd-sb__item ${activeSection === "generer" ? "zd-sb__item--on" : ""}`} onClick={() => setActiveSection("generer")}>
+            <div className={`zd-sb__item ${activeSection === "generer" ? "zd-sb__item--on" : ""}`} onClick={() => router.push("/generer")}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
               Générer
             </div>
@@ -177,7 +177,7 @@ export default function DashboardPage() {
                       ))}
                     </div>
                     <div className="zd-row" style={{gap:10,flexWrap:"wrap",marginBottom:14}}>
-                      <button className="zd-btn zd-btn--cyan" onClick={() => setActiveSection("generer")}>💎 Utiliser le pack gratuit</button>
+                      <button className="zd-btn zd-btn--cyan" onClick={() => router.push("/generer")}>💎 Utiliser le pack gratuit</button>
                       <button className="zd-btn zd-btn--ghost">Afficher le tour rapide →</button>
                       <button className="zd-btn zd-btn--ghost">Passer aux images →</button>
                     </div>
@@ -200,7 +200,7 @@ export default function DashboardPage() {
                       <span className="zd-pill">1 / 1 voix off restante</span>
                     </div>
                   </div>
-                  <button className="zd-btn zd-btn--cyan" style={{flexShrink:0}} onClick={() => setActiveSection("generer")}>💎 Ouvrir l&apos;essai gratuit</button>
+                  <button className="zd-btn zd-btn--cyan" style={{flexShrink:0}} onClick={() => router.push("/generer")}>💎 Ouvrir l&apos;essai gratuit</button>
                 </div>
 
 
@@ -226,7 +226,7 @@ export default function DashboardPage() {
                       <div style={{padding:"14px 16px"}}>
                         <div style={{fontWeight:700,color:"#fff",fontSize:13,marginBottom:5}}>{e.title}</div>
                         <div style={{color:"#6b7280",fontSize:11,lineHeight:1.5,marginBottom:10}}>{e.desc}</div>
-                        <a href="#" className="zd-link" onClick={(ev) => { ev.preventDefault(); setActiveSection("generer"); }}>Créer quelque chose comme ça →</a>
+                        <a href="#" className="zd-link" onClick={(ev) => { ev.preventDefault(); router.push("/generer"); }}>Créer quelque chose comme ça →</a>
                       </div>
                     </div>
                   ))}
@@ -234,8 +234,8 @@ export default function DashboardPage() {
 
                 {/* Quick actions */}
                 <div className="zd-grid3" style={{marginBottom:24}}>
-                  {[["🖼","Créer des images","Visuels produit","generer"],["🎬","Créer une vidéo","Clips promo","generer"],["🎵","Créer de l'audio","Voix off","generer"]].map(([ic,t,s,sec]) => (
-                    <div key={t} className="zd-card zd-card--action" onClick={() => setActiveSection(sec)} style={{padding:"14px 16px",display:"flex",alignItems:"center",gap:12,cursor:"pointer"}}>
+                  {[["🖼","Créer des images","Visuels produit"],["🎬","Créer une vidéo","Clips promo"],["🎵","Créer de l'audio","Voix off"]].map(([ic,t,s]) => (
+                    <div key={t} className="zd-card zd-card--action" onClick={() => router.push("/generer")} style={{padding:"14px 16px",display:"flex",alignItems:"center",gap:12,cursor:"pointer"}}>
                       <span style={{fontSize:20}}>{ic}</span>
                       <div>
                         <div style={{fontWeight:600,color:"#fff",fontSize:13}}>{t}</div>

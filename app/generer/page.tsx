@@ -5,41 +5,31 @@ import Link from "next/link";
 
 const MODELS = {
   images: [
-    { id: "fal-ai/flux-pro/v1.1", name: "FLUX.2 Pro", desc: "Production haute qualité, photorealiste", credits: 8, tag: "⭐ Top", color: "#06b6d4" },
-    { id: "fal-ai/flux/dev", name: "FLUX.1 Dev", desc: "Haute fidélité, idéal pour projets créatifs", credits: 5, tag: "Populaire", color: "#a855f7" },
-    { id: "fal-ai/flux/schnell", name: "FLUX.1 Schnell", desc: "Ultra rapide, résultats en quelques secondes", credits: 2, tag: "⚡ Rapide", color: "#10b981" },
-    { id: "fal-ai/ideogram/v2", name: "Ideogram V3", desc: "Excellent rendu du texte dans les images", credits: 6, tag: "Texte IA", color: "#f59e0b" },
-    { id: "fal-ai/recraft-v3", name: "Recraft V3", desc: "Design vectoriel, illustrations pro", credits: 5, tag: "", color: "" },
-    { id: "fal-ai/stable-diffusion-xl", name: "Stable Diffusion XL", desc: "Modèle open-source polyvalent", credits: 3, tag: "", color: "" },
-    { id: "fal-ai/aura-flow", name: "AuraFlow", desc: "Images artistiques style peinture", credits: 3, tag: "", color: "" },
-    { id: "fal-ai/kolors", name: "Kolors", desc: "Couleurs vives, style artistique asiatique", credits: 3, tag: "", color: "" },
-    { id: "fal-ai/pixart-sigma", name: "PixArt Sigma", desc: "Images haute résolution réalistes", credits: 4, tag: "", color: "" },
-    { id: "fal-ai/playground-v25", name: "Playground V2.5", desc: "Polyvalent, rendu esthétique soigné", credits: 3, tag: "", color: "" },
-  ],
-  videos: [
-    { id: "fal-ai/kling-video/v1.6/pro/text-to-video", name: "Kling 3.0 Pro", desc: "Cinématique haute qualité, audio natif", credits: 40, tag: "⭐ Premium", color: "#06b6d4" },
-    { id: "fal-ai/kling-video/v1.6/standard/text-to-video", name: "Kling 3.0 Standard", desc: "Vidéos fluides et réalistes", credits: 20, tag: "Populaire", color: "#a855f7" },
-    { id: "fal-ai/veo2", name: "Veo 2 (Google)", desc: "Physique réaliste, contrôle caméra avancé", credits: 50, tag: "Google", color: "#f59e0b" },
-    { id: "fal-ai/minimax-video", name: "Hailuo 2.3 Pro", desc: "Vidéo image-to-video à faible coût", credits: 15, tag: "", color: "" },
-    { id: "fal-ai/wan-i2v", name: "Wan 2.7", desc: "Image vers vidéo fluide", credits: 12, tag: "", color: "" },
-    { id: "fal-ai/pixverse-v4", name: "PixVerse V6", desc: "Physique réaliste et visuels saisissants", credits: 18, tag: "", color: "" },
-    { id: "fal-ai/ltx-video", name: "LTX Video 2", desc: "Open-weight, très flexible", credits: 8, tag: "Open Source", color: "#10b981" },
-    { id: "fal-ai/animatediff-v2v", name: "AnimateDiff", desc: "Animation style anime et manga", credits: 10, tag: "", color: "" },
+    { id: "fal-ai/nano-banana-2", name: "Nano Banana 2", brand: "Google", desc: "Génération rapide et vibrante, excellent rendu du texte", credits: 6, tag: "⭐ Top", color: "#4285F4" },
+    { id: "fal-ai/gpt-image-1-5", name: "GPT Image 1.5", brand: "OpenAI", desc: "Édition fine et détaillée des images", credits: 8, tag: "OpenAI", color: "#10a37f" },
+    { id: "fal-ai/gpt-image-2", name: "GPT Image 2", brand: "OpenAI", desc: "Dernière version, modifications précises", credits: 10, tag: "Nouveau", color: "#10a37f" },
+    { id: "fal-ai/openai-4o-image", name: "4o Image", brand: "OpenAI", desc: "Modèle multimodal d'OpenAI", credits: 8, tag: "OpenAI", color: "#10a37f" },
+    { id: "fal-ai/seedream-5-lite", name: "Seedream 5.0 Lite", brand: "ByteDance", desc: "Génération et édition unifiées, style réaliste", credits: 5, tag: "ByteDance", color: "#fe2c55" },
+    { id: "fal-ai/qwen-vl-plus", name: "Qwen", brand: "Qwen", desc: "Modèle image polyvalent d'Alibaba", credits: 4, tag: "Qwen", color: "#6b7280" },
+    { id: "fal-ai/grok-imagine", name: "Grok Imagine", brand: "Grok", desc: "Génération d'images par Grok xAI", credits: 5, tag: "xAI", color: "#888" },
   ],
   audio: [
-    { id: "fal-ai/elevenlabs/tts/multilingual-v2", name: "ElevenLabs V2", desc: "Voix off ultra-naturelles multilingues", credits: 3, tag: "⭐ Top", color: "#06b6d4" },
-    { id: "fal-ai/stable-audio", name: "Stable Audio 2", desc: "Génération de musique et ambiances", credits: 5, tag: "Populaire", color: "#a855f7" },
-    { id: "fal-ai/mmaudio-v2", name: "MMAudio V2", desc: "Audio synchronisé avec vidéo", credits: 6, tag: "", color: "" },
-    { id: "fal-ai/kokoro", name: "Kokoro TTS", desc: "Synthèse vocale rapide et naturelle", credits: 2, tag: "⚡ Rapide", color: "#10b981" },
-    { id: "fal-ai/playai-tts", name: "PlayAI TTS", desc: "Voix expressives et personnalisables", credits: 4, tag: "", color: "" },
+    { id: "fal-ai/elevenlabs/tts/multilingual-v2", name: "Text to Speech", brand: "ElevenLabs", desc: "Voix off ultra-naturelles multilingues", credits: 3, tag: "⭐ Top", color: "#06b6d4" },
+    { id: "fal-ai/suno-v4", name: "Generate", brand: "Suno", desc: "Génération de musique complète avec paroles", credits: 8, tag: "Musique", color: "#a855f7" },
   ],
-  editing: [
-    { id: "fal-ai/flux-pro/v1.1-ultra", name: "FLUX Inpainting", desc: "Modifier une zone précise de l'image", credits: 6, tag: "Populaire", color: "#a855f7" },
-    { id: "fal-ai/background-removal", name: "Suppression fond", desc: "Enlever l'arrière-plan automatiquement", credits: 1, tag: "⚡ Rapide", color: "#10b981" },
-    { id: "fal-ai/clarity-upscaler", name: "Upscaler 4K", desc: "Améliorer la résolution jusqu'en 4K", credits: 4, tag: "", color: "" },
-    { id: "fal-ai/face-to-sticker", name: "Face to Sticker", desc: "Transformer un visage en sticker", credits: 3, tag: "", color: "" },
-    { id: "fal-ai/imageutils/rembg", name: "Remove BG Pro", desc: "Suppression fond précise et rapide", credits: 1, tag: "", color: "" },
-    { id: "fal-ai/creative-upscaler", name: "Creative Upscaler", desc: "Upscaling créatif avec amélioration IA", credits: 5, tag: "", color: "" },
+  videos: [
+    { id: "fal-ai/veo3", name: "Veo 3.1", brand: "Google", desc: "Audio natif, physique réaliste, contrôle caméra avancé", credits: 50, tag: "⭐ Google", color: "#4285F4" },
+    { id: "fal-ai/seedance-v1", name: "SeeDance V1", brand: "ByteDance", desc: "Vidéo cinématique avec audio synchronisé", credits: 30, tag: "Nouveau", color: "#fe2c55" },
+    { id: "fal-ai/seedance-2", name: "SeeDance 2.0", brand: "ByteDance", desc: "Référence vidéo avancée jusqu'à 9 images", credits: 35, tag: "ByteDance", color: "#fe2c55" },
+    { id: "fal-ai/grok-imagine-video", name: "Grok Imagine", brand: "Grok", desc: "Génération vidéo par Grok xAI", credits: 20, tag: "xAI", color: "#888" },
+    { id: "fal-ai/kling-video/v1.6/pro/text-to-video", name: "Kling 3.0", brand: "Kling", desc: "Cinématique haute qualité, audio natif", credits: 40, tag: "⭐ Premium", color: "#06b6d4" },
+    { id: "fal-ai/kling-video/v2/master/text-to-video", name: "Kling 3.0 Motion Control", brand: "Kling", desc: "Contrôle précis du mouvement et de la caméra", credits: 45, tag: "Kling", color: "#06b6d4" },
+    { id: "fal-ai/kling-video/v1.5/pro/text-to-video", name: "Kling 2.6", brand: "Kling", desc: "Vidéos fluides et réalistes haute qualité", credits: 25, tag: "Kling", color: "#06b6d4" },
+    { id: "fal-ai/kling-video/v1/standard/text-to-video", name: "Kling 2.5 Turbo", brand: "Kling", desc: "Génération rapide et économique", credits: 12, tag: "⚡ Rapide", color: "#10b981" },
+    { id: "fal-ai/runway-gen3", name: "Runway", brand: "Runway", desc: "Modèle vidéo créatif et polyvalent", credits: 20, tag: "Runway", color: "#6b7280" },
+    { id: "fal-ai/minimax-video", name: "Hailuo 2.3", brand: "Hailuo", desc: "Vidéo image-to-video à faible coût", credits: 15, tag: "Hailuo", color: "#6b7280" },
+    { id: "fal-ai/wan-i2v", name: "Wan 2.6", brand: "Wan", desc: "Image vers vidéo fluide et réaliste", credits: 10, tag: "Wan", color: "#6b7280" },
+    { id: "fal-ai/wan-t2v", name: "Wan 2.7", brand: "Wan", desc: "Texte vers vidéo nouvelle génération", credits: 12, tag: "Wan", color: "#6b7280" },
   ],
 };
 
@@ -49,12 +39,25 @@ const CATEGORIES: [Cat, string, string][] = [
   ["images", "🖼", "Images"],
   ["videos", "🎬", "Vidéos"],
   ["audio", "🎵", "Audio"],
-  ["editing", "✂️", "Édition"],
 ];
+
+const BRAND_COLORS: Record<string, string> = {
+  "Google": "#4285F4",
+  "OpenAI": "#10a37f",
+  "ByteDance": "#fe2c55",
+  "ElevenLabs": "#06b6d4",
+  "Suno": "#a855f7",
+  "Kling": "#06b6d4",
+  "Runway": "#888",
+  "Hailuo": "#f59e0b",
+  "Wan": "#6b7280",
+  "Grok": "#888",
+  "Qwen": "#6b7280",
+};
 
 export default function GeneratePage() {
   const [cat, setCat] = useState<Cat>("images");
-  const [selected, setSelected] = useState<typeof MODELS.images[0] | null>(null);
+  const [selected, setSelected] = useState<(typeof MODELS.images[0]) | null>(null);
   const [prompt, setPrompt] = useState("");
   const [generating, setGenerating] = useState(false);
   const [result, setResult] = useState<string | null>(null);
@@ -78,6 +81,13 @@ export default function GeneratePage() {
     setGenerating(false);
   };
 
+  // Group models by brand
+  const grouped = MODELS[cat].reduce((acc, m) => {
+    if (!acc[m.brand]) acc[m.brand] = [];
+    acc[m.brand].push(m);
+    return acc;
+  }, {} as Record<string, typeof MODELS.images>);
+
   return (
     <>
       <style>{CSS}</style>
@@ -87,7 +97,7 @@ export default function GeneratePage() {
         <div className="gp-header">
           <Link href="/dashboard" className="gp-back">← Retour au dashboard</Link>
           <h1 className="gp-title">Générer du contenu IA ⚡</h1>
-          <p className="gp-sub">Choisissez un modèle parmi {Object.values(MODELS).flat().length}+ modèles disponibles</p>
+          <p className="gp-sub">{Object.values(MODELS).flat().length} modèles disponibles — Images, Vidéos, Audio</p>
         </div>
 
         {/* Category tabs */}
@@ -103,69 +113,66 @@ export default function GeneratePage() {
 
         <div className="gp-layout">
 
-          {/* Left: Models */}
+          {/* Left: Models grouped by brand */}
           <div className="gp-left">
-            <div className="gp-section-label">
-              {MODELS[cat].length} modèles disponibles
-            </div>
-            <div className="gp-grid">
-              {MODELS[cat].map(m => (
-                <div key={m.id}
-                  className={`gp-model ${selected?.id === m.id ? "gp-model--on" : ""}`}
-                  onClick={() => setSelected(m as typeof MODELS.images[0])}>
-                  {m.tag && (
-                    <div className="gp-model__tag" style={{ background: m.color ? `${m.color}20` : "rgba(255,255,255,.06)", borderColor: m.color ? `${m.color}40` : "rgba(255,255,255,.08)", color: m.color || "#888" }}>
-                      {m.tag}
-                    </div>
-                  )}
-                  <div className="gp-model__name">{m.name}</div>
-                  <div className="gp-model__desc">{m.desc}</div>
-                  <div className="gp-model__footer">
-                    <span className="gp-model__credits">💎 {m.credits} crédits</span>
-                    {selected?.id === m.id && <span className="gp-model__check">✓</span>}
-                  </div>
+            {Object.entries(grouped).map(([brand, models]) => (
+              <div key={brand} className="gp-brand-section">
+                <div className="gp-brand-header">
+                  <div className="gp-brand-dot" style={{ background: BRAND_COLORS[brand] || "#555" }} />
+                  <span className="gp-brand-name">{brand}</span>
+                  <span className="gp-brand-count">{models.length} modèle{models.length > 1 ? "s" : ""}</span>
                 </div>
-              ))}
-            </div>
+                <div className="gp-grid">
+                  {models.map(m => (
+                    <div key={m.id}
+                      className={`gp-model ${selected?.id === m.id ? "gp-model--on" : ""}`}
+                      onClick={() => setSelected(m as typeof MODELS.images[0])}>
+                      {m.tag && (
+                        <div className="gp-model__tag" style={{
+                          background: `${BRAND_COLORS[brand] || "#555"}20`,
+                          borderColor: `${BRAND_COLORS[brand] || "#555"}40`,
+                          color: BRAND_COLORS[brand] || "#888"
+                        }}>
+                          {m.tag}
+                        </div>
+                      )}
+                      <div className="gp-model__name">{m.name}</div>
+                      <div className="gp-model__desc">{m.desc}</div>
+                      <div className="gp-model__footer">
+                        <span className="gp-model__credits">💎 {m.credits} crédits</span>
+                        {selected?.id === m.id && <span className="gp-model__check">✓</span>}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
 
           {/* Right: Panel */}
           <div className="gp-panel">
             {selected ? (
               <>
-                <div className="gp-panel__model">
-                  <div>
-                    <div className="gp-panel__model-name">{selected.name}</div>
-                    <div className="gp-panel__model-desc">{selected.desc}</div>
-                  </div>
-                  <div className="gp-credits-pill">💎 {selected.credits} crédits</div>
+                <div className="gp-panel__brand" style={{ borderLeftColor: BRAND_COLORS[selected.brand] || "#555" }}>
+                  <div style={{ fontSize: 11, color: BRAND_COLORS[selected.brand] || "#888", fontWeight: 700, textTransform: "uppercase", letterSpacing: ".06em", marginBottom: 4 }}>{selected.brand}</div>
+                  <div className="gp-panel__name">{selected.name}</div>
+                  <div className="gp-panel__desc">{selected.desc}</div>
+                  <div className="gp-credits-pill" style={{ marginTop: 8, display: "inline-flex" }}>💎 {selected.credits} crédits</div>
                 </div>
 
                 <label className="gp-label">
-                  {cat === "audio" ? "Texte à convertir" : cat === "videos" ? "Décrivez votre vidéo" : cat === "editing" ? "Instructions d'édition" : "Décrivez votre image"}
+                  {cat === "audio" ? "Texte à convertir en voix" : cat === "videos" ? "Décrivez votre vidéo" : "Décrivez votre image"}
                 </label>
                 <textarea className="gp-textarea"
                   placeholder={
                     cat === "images" ? "Ex: Un coucher de soleil sur Paris, style cinématique, ultra réaliste..." :
-                    cat === "videos" ? "Ex: Un tigre qui court dans une forêt tropicale, caméra drone..." :
-                    cat === "audio" ? "Ex: Bonjour et bienvenue sur Fluxora, votre plateforme IA..." :
-                    "Ex: Supprime l'arrière-plan et garde uniquement le sujet principal..."
+                    cat === "videos" ? "Ex: Un tigre qui court dans une forêt tropicale, caméra drone dynamique..." :
+                    "Ex: Bonjour et bienvenue sur Fluxora, votre plateforme IA créative..."
                   }
                   value={prompt}
                   onChange={e => setPrompt(e.target.value)}
                   rows={5}
                 />
-
-                {cat === "images" && (
-                  <>
-                    <label className="gp-label">Format de l&apos;image</label>
-                    <div className="gp-options">
-                      {[["Carré (1:1)", "square_hd"], ["Portrait (9:16)", "portrait_4_3"], ["Paysage (16:9)", "landscape_16_9"]].map(([l]) => (
-                        <button key={l} className="gp-option">{l}</button>
-                      ))}
-                    </div>
-                  </>
-                )}
 
                 <button className="gp-btn" onClick={handleGenerate} disabled={generating || !prompt}>
                   {generating ? "⏳ Génération en cours..." : `⚡ Générer — ${selected.credits} crédits`}
@@ -195,7 +202,7 @@ export default function GeneratePage() {
               <div className="gp-empty">
                 <div style={{ fontSize: 48, marginBottom: 16 }}>👈</div>
                 <h3 style={{ color: "#fff", marginBottom: 8, fontSize: 16 }}>Sélectionnez un modèle</h3>
-                <p>Choisissez un modèle dans la liste pour commencer à générer</p>
+                <p>Choisissez un modèle dans la liste pour commencer</p>
               </div>
             )}
           </div>
@@ -223,10 +230,15 @@ const CSS = `
   .gp-tab--on .gp-tab__count { background: rgba(6,182,212,.2); color: #06b6d4; }
 
   .gp-layout { display: grid; grid-template-columns: 1fr 360px; gap: 20px; align-items: start; }
-  .gp-section-label { font-size: 12px; color: #555; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 14px; }
+
+  .gp-brand-section { margin-bottom: 24px; }
+  .gp-brand-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .gp-brand-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .gp-brand-name { font-size: 13px; font-weight: 700; color: #fff; }
+  .gp-brand-count { font-size: 11px; color: #555; margin-left: 4px; }
 
   .gp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
-  .gp-model { background: #0f1020; border: 1px solid rgba(255,255,255,.07); border-radius: 10px; padding: 14px; cursor: pointer; transition: all .2s; position: relative; }
+  .gp-model { background: #0f1020; border: 1px solid rgba(255,255,255,.07); border-radius: 10px; padding: 14px; cursor: pointer; transition: all .2s; }
   .gp-model:hover { border-color: rgba(6,182,212,.2); transform: translateY(-1px); }
   .gp-model--on { border-color: #06b6d4; background: rgba(6,182,212,.06); }
   .gp-model__tag { display: inline-flex; align-items: center; border-radius: 100px; padding: 2px 8px; font-size: 9px; font-weight: 700; margin-bottom: 8px; border: 1px solid; }
@@ -237,17 +249,14 @@ const CSS = `
   .gp-model__check { font-size: 12px; color: #10b981; font-weight: 700; }
 
   .gp-panel { background: #0f1020; border: 1px solid rgba(255,255,255,.07); border-radius: 12px; padding: 20px; position: sticky; top: 20px; }
-  .gp-panel__model { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; background: #141428; border-radius: 8px; padding: 12px; margin-bottom: 16px; }
-  .gp-panel__model-name { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 3px; }
-  .gp-panel__model-desc { font-size: 11px; color: #6b7280; }
-  .gp-credits-pill { background: rgba(6,182,212,.1); border: 1px solid rgba(6,182,212,.2); border-radius: 100px; padding: 3px 10px; font-size: 11px; color: #06b6d4; font-weight: 600; white-space: nowrap; flex-shrink: 0; }
-  .gp-label { display: block; font-size: 11px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
+  .gp-panel__brand { border-left: 3px solid; padding-left: 12px; margin-bottom: 16px; }
+  .gp-panel__name { font-size: 16px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+  .gp-panel__desc { font-size: 12px; color: #6b7280; line-height: 1.5; }
+  .gp-credits-pill { background: rgba(6,182,212,.1); border: 1px solid rgba(6,182,212,.2); border-radius: 100px; padding: 3px 10px; font-size: 11px; color: #06b6d4; font-weight: 600; }
+  .gp-label { display: block; font-size: 11px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; margin-top: 16px; }
   .gp-textarea { width: 100%; background: #141428; border: 1px solid rgba(255,255,255,.08); border-radius: 8px; padding: 12px; color: #fff; font-size: 13px; font-family: inherit; outline: none; resize: vertical; transition: border-color .2s; margin-bottom: 14px; }
   .gp-textarea:focus { border-color: #06b6d4; }
   .gp-textarea::placeholder { color: #333; }
-  .gp-options { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
-  .gp-option { background: #141428; border: 1px solid rgba(255,255,255,.08); border-radius: 6px; padding: 6px 10px; font-size: 11px; color: #888; cursor: pointer; font-family: inherit; transition: all .2s; }
-  .gp-option:hover { color: #ccc; border-color: rgba(255,255,255,.15); }
   .gp-btn { width: 100%; background: linear-gradient(135deg,#06b6d4,#0891b2); color: #fff; border: none; border-radius: 8px; padding: 13px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all .2s; margin-bottom: 12px; }
   .gp-btn:hover { opacity: .9; transform: translateY(-1px); }
   .gp-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
